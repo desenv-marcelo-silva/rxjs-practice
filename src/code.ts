@@ -1,5 +1,7 @@
 import { Observable } from 'rxjs';
 
+import { share } from 'rxjs';
+
 var observable = new Observable((observer: any) => {
   try {
     observer.next('hello rxjs');
@@ -10,7 +12,7 @@ var observable = new Observable((observer: any) => {
   } catch (err) {
     observer.error(err);
   }
-});
+}).pipe(share());
 
 var observer = observable.subscribe({
   next: (x: any) => addItem(x),
