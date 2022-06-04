@@ -1,6 +1,6 @@
-import { BehaviorSubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 
-var subject = new BehaviorSubject('First thing');
+var subject = new ReplaySubject(30, 500);
 
 subject.subscribe({
   next: (data: any) => addItem('Observer 1: ' + data),
@@ -8,18 +8,14 @@ subject.subscribe({
   complete: () => addItem('Observer 1 completed'),
 });
 
-subject.next('The first thing has been sent');
-subject.next('Hey, the behavior is different. Observer2 is about to subscribe');
+var i = 1;
+var int = setInterval(() => subject.next(i++), 200);
 
-var observer2 = subject.subscribe({
-  next: (data: any) => addItem('Observer 2: ' + data),
-});
-subject.next('The second thing has been sent');
-subject.next('A third thing has been sent');
-
-observer2.unsubscribe();
-
-subject.next('A final thing has been sent');
+setTimeout(() => {
+  var observer2 = subject.subscribe({
+    next: (data: any) => addItem('Observer 2: ' + data),
+  });
+}, 500);
 
 function addItem(val: any) {
   var node = document.createElement('li');
