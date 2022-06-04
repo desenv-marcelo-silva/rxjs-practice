@@ -18,15 +18,11 @@ var observer = observable.subscribe({
   complete: () => addItem('the complete has been done.'),
 });
 
-var observer2 = observable.subscribe({
-  next: (x: any) => addItem(x),
-});
-
-observer.add(observer2);
-
 setTimeout(() => {
-  observer.unsubscribe();
-}, 6001);
+  var observer2 = observable.subscribe({
+    next: (x: any) => addItem('Subscriber #2: ' + x),
+  });
+}, 1000);
 
 function addItem(val: any) {
   var node = document.createElement('li');
