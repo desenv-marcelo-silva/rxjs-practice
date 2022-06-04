@@ -1,30 +1,10 @@
-import { Observable } from 'rxjs';
+import { fromEvent } from 'rxjs';
 
-import { share } from 'rxjs';
-
-var observable = new Observable((observer: any) => {
-  try {
-    observer.next('hello rxjs');
-    observer.next('how do you work?');
-    setInterval(() => {
-      observer.next('I work on assyncrhonus and syncronus mode.');
-    }, 2000);
-  } catch (err) {
-    observer.error(err);
-  }
-}).pipe(share());
-
-var observer = observable.subscribe({
-  next: (x: any) => addItem(x),
-  error: (error: any) => addItem(error),
-  complete: () => addItem('the complete has been done.'),
-});
+var observable = fromEvent(document, 'mousemove');
 
 setTimeout(() => {
-  var observer2 = observable.subscribe({
-    next: (x: any) => addItem('Subscriber #2: ' + x),
-  });
-}, 1000);
+  var subscription = observable.subscribe((x: any) => addItem(x));
+}, 2000);
 
 function addItem(val: any) {
   var node = document.createElement('li');
